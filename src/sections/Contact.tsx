@@ -200,7 +200,7 @@ const Contact = () => {
               <div className="space-y-3 text-light-gray">
                 <p className="flex items-start gap-2">
                   <span className="text-lime mt-1">▹</span>
-                  <span>Based in Hildesheim, Germany</span>
+                  <span>Based in Germany</span>
                 </p>
                 <p className="flex items-start gap-2">
                   <span className="text-lime mt-1">▹</span>
