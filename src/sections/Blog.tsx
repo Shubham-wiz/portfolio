@@ -81,13 +81,15 @@ const Blog = () => {
         {/* Blog grid - BIGGER cards */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
           {filteredPosts.map((post, index) => (
-            <Tilt3D key={post.id} tiltMaxAngle={8}>
-              <BlogCard
-                post={post}
-                index={index}
-                onClick={() => setSelectedArticle(post)}
-              />
-            </Tilt3D>
+            <div key={post.id} onClick={() => setSelectedArticle(post)}>
+              <Tilt3D tiltMaxAngle={8}>
+                <BlogCard
+                  post={post}
+                  index={index}
+                  onClick={() => setSelectedArticle(post)}
+                />
+              </Tilt3D>
+            </div>
           ))}
         </div>
 
@@ -215,7 +217,8 @@ const ArticleModal = ({ article, onClose }: { article: BlogArticle | null; onClo
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-hidden"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
+          style={{ alignItems: 'center' }}
           onClick={onClose}
         >
           <motion.div
