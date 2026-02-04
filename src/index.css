@@ -1,0 +1,34 @@
+@import "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700;800&display=swap";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply m-0 p-0 box-border;
+  }
+
+  body {
+    @apply bg-dark-bg text-white font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-purple-500 to-lime bg-clip-text text-transparent;
+  }
+
+  .glow-text {
+    text-shadow: 0 0 40px rgba(209, 226, 157, 0.5);
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+}

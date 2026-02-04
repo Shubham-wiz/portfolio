@@ -1,0 +1,10 @@
+# Redirect www to non-www
+https://www.shubhamdwivedi.tech/* https://shubhamdwivedi.tech/:splat 301!
+https://www.shubhamdwivedi.me/* https://shubhamdwivedi.me/:splat 301!
+
+# Redirect .me domain to .tech (optional - choose one domain as primary)
+# Uncomment the line below if you want .me to redirect to .tech
+# https://shubhamdwivedi.me/* https://shubhamdwivedi.tech/:splat 301!
+
+# SPA fallback for client-side routing (if needed in future)
+/* /index.html 200
