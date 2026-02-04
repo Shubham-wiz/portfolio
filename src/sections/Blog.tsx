@@ -106,7 +106,8 @@ const Blog = () => {
 const BlogCard = ({ post, index, onClick }: { post: BlogArticle; index: number; onClick: () => void }) => {
   return (
     <motion.article
-      initial={{ opacity: 0, y: 50 }}
+      initial={false}
+      animate={{ opacity: 1, y: 0 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ delay: index * 0.1 }}

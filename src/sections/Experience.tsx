@@ -243,7 +243,8 @@ const Experience = () => {
           {experiences.map((exp, index) => (
             <Tilt3D key={exp.id} tiltMaxAngle={10}>
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={false}
+                animate={{ opacity: 1, y: 0 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}

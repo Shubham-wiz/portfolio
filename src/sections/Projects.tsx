@@ -23,7 +23,8 @@ const Projects = () => {
           {projects.map((project, index) => (
             <Tilt3D key={project.id} tiltMaxAngle={8}>
               <motion.div
-                initial={{ opacity: 0, y: 50 }}
+                initial={false}
+                animate={{ opacity: 1, y: 0 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
