@@ -7,7 +7,7 @@ const Contact = () => {
 
   const socials = [
     { icon: Linkedin, label: "LinkedIn", value: "linkedin.com/in/shubhamdwivedi", href: "https://linkedin.com/in/shubhamdwivedi" },
-    { icon: MapPin, label: "Location", value: "Hildesheim, Germany", href: "https://www.google.com/maps/place/Hildesheim" },
+    { icon: MapPin, label: "Location", value: "Germany", href: "https://www.google.com/maps/place/Germany" },
   ];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

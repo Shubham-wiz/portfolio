@@ -26,7 +26,7 @@ const About = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
           <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-6">
             <p className="text-light-gray text-lg leading-relaxed">
-              I'm a Data Engineer and AI Architect with a passion for building intelligent systems that process and analyze data at scale. Currently based in Hildesheim, Germany, I specialize in creating robust data pipelines, deploying machine learning models, and developing AI-driven automation solutions.
+              I'm a Data Engineer and AI Architect with a passion for building intelligent systems that process and analyze data at scale. Currently based in Germany, I specialize in creating robust data pipelines, deploying machine learning models, and developing AI-driven automation solutions.
             </p>
             <p className="text-light-gray text-lg leading-relaxed">
               With experience at companies like <span className="text-lime font-semibold">Metamatics</span>, <span className="text-lime font-semibold">PERI GmbH</span>, and <span className="text-lime font-semibold">Quantizant</span>, I've developed multi-agent AI systems, optimized ETL workflows processing terabyte-scale datasets, and implemented MLOps pipelines that drive measurable business impact.

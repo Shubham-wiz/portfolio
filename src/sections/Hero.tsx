@@ -275,9 +275,9 @@ const Hero = ({ onNavigate }: { onNavigate: (section: string) => void }) => {
         >
           <div className="flex items-center gap-2 mb-1">
             <div className="w-2 h-2 bg-lime rounded-full animate-pulse" />
-            <span>HILDESHEIM, DE</span>
+            <span>GERMANY</span>
           </div>
-          <div>52.1500° N, 9.9500° E</div>
+          <div>51.1657° N, 10.4515° E</div>
         </motion.div>
       </div>
 
