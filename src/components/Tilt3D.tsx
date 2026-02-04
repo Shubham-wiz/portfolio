@@ -59,10 +59,11 @@ const Tilt3D = ({ children, className = '', tiltMaxAngle = 15 }: Tilt3DProps) =>
         rotateY,
         rotateX,
         transformStyle: 'preserve-3d',
+        pointerEvents: 'auto',
       }}
       className={className}
     >
-      <div style={{ transform: 'translateZ(75px)', transformStyle: 'preserve-3d' }}>
+      <div style={{ transform: 'translateZ(75px)', transformStyle: 'preserve-3d', pointerEvents: 'auto' }}>
         {children}
       </div>
     </motion.div>

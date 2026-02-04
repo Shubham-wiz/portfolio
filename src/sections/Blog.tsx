@@ -106,6 +106,11 @@ const Blog = () => {
 };
 
 const BlogCard = ({ post, index, onClick }: { post: BlogArticle; index: number; onClick: () => void }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onClick();
+  };
+
   return (
     <motion.article
       initial={false}
@@ -114,9 +119,10 @@ const BlogCard = ({ post, index, onClick }: { post: BlogArticle; index: number; 
       viewport={{ once: true, margin: "-100px" }}
       transition={{ delay: index * 0.1 }}
       className="group relative bg-dark-card border border-light-gray/10 rounded-2xl overflow-hidden hover:border-lime/30 transition-all duration-500 cursor-pointer h-full flex flex-col"
-      onClick={onClick}
+      onClick={handleClick}
+      onPointerDown={handleClick}
       whileHover={{ scale: 1.02 }}
-      style={{ minHeight: '520px' }}
+      style={{ minHeight: '520px', pointerEvents: 'auto' }}
     >
       {/* Image container - BIGGER */}
       <div className="relative h-80 overflow-hidden">
