@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Briefcase, MapPin, X, TrendingUp } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Tilt3D from '../components/Tilt3D';
 
 interface Experience {
@@ -253,81 +254,81 @@ const Experience = () => {
                 onClick={() => setSelectedExperience(exp)}
                 style={{ transformStyle: 'preserve-3d', minHeight: '420px' }}
               >
-              {/* Company & Role */}
-              <div className="mb-3">
-                <h3 className="font-display text-xl font-bold mb-2 group-hover:text-gradient transition-colors line-clamp-2">
-                  {exp.role}
-                </h3>
-                <div className="flex items-center gap-2 text-light-gray/70 text-sm mb-1">
-                  <Briefcase className="w-4 h-4" />
-                  <span className="font-medium">{exp.company}</span>
-                </div>
-                <div className="flex items-center gap-2 text-light-gray/60 text-xs mb-2">
-                  <MapPin className="w-3 h-3" />
-                  <span>{exp.location}</span>
-                </div>
-                {/* Tagline */}
-                <p className="text-light-gray/80 text-sm italic line-clamp-2">
-                  {exp.tagline}
-                </p>
-              </div>
-
-              {/* Period Badge */}
-              <div className="px-3 py-1.5 rounded-full border border-lime/30 text-lime font-mono text-xs text-center mb-3">
-                {exp.period}
-              </div>
-
-              {/* Key Technologies */}
-              <div className="mb-3">
-                <div className="text-xs font-semibold text-light-gray/70 mb-2">Tech Stack:</div>
-                <div className="flex flex-wrap gap-1">
-                  {exp.keyTech.slice(0, 4).map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-1 rounded text-xs font-medium"
-                      style={{ 
-                        backgroundColor: `${exp.color}10`, 
-                        color: exp.color,
-                        border: `1px solid ${exp.color}30`
-                      }}
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Top Achievements Preview */}
-              <div className="mb-3">
-                <div className="text-xs font-semibold text-light-gray/70 mb-2">Key Impact:</div>
-                <ul className="space-y-1">
-                  {exp.topAchievements.slice(0, 2).map((achievement, i) => (
-                    <li key={i} className="text-light-gray/70 text-xs flex items-start gap-1.5">
-                      <span className="text-lime mt-0.5">▸</span>
-                      <span className="line-clamp-1">{achievement}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Highlights Preview */}
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                {exp.highlights.slice(0, 2).map((highlight) => (
-                  <div 
-                    key={highlight.label} 
-                    className="px-3 py-2 rounded-lg text-center"
-                    style={{ backgroundColor: `${exp.color}15`, border: `1px solid ${exp.color}30` }}
-                  >
-                    <div className="text-xs text-light-gray/70 truncate">{highlight.label}</div>
-                    <div className="text-lg font-bold" style={{ color: exp.color }}>{highlight.value}</div>
+                {/* Company & Role */}
+                <div className="mb-3">
+                  <h3 className="font-display text-xl font-bold mb-2 group-hover:text-gradient transition-colors line-clamp-2">
+                    {exp.role}
+                  </h3>
+                  <div className="flex items-center gap-2 text-light-gray/70 text-sm mb-1">
+                    <Briefcase className="w-4 h-4" />
+                    <span className="font-medium">{exp.company}</span>
                   </div>
-                ))}
-              </div>
+                  <div className="flex items-center gap-2 text-light-gray/60 text-xs mb-2">
+                    <MapPin className="w-3 h-3" />
+                    <span>{exp.location}</span>
+                  </div>
+                  {/* Tagline */}
+                  <p className="text-light-gray/80 text-sm italic line-clamp-2">
+                    {exp.tagline}
+                  </p>
+                </div>
 
-              {/* View Details */}
-              <div className="text-sm text-lime font-medium text-center opacity-0 group-hover:opacity-100 transition-opacity">
-                Click for full details →
-              </div>
+                {/* Period Badge */}
+                <div className="px-3 py-1.5 rounded-full border border-lime/30 text-lime font-mono text-xs text-center mb-3">
+                  {exp.period}
+                </div>
+
+                {/* Key Technologies */}
+                <div className="mb-3">
+                  <div className="text-xs font-semibold text-light-gray/70 mb-2">Tech Stack:</div>
+                  <div className="flex flex-wrap gap-1">
+                    {exp.keyTech.slice(0, 4).map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2 py-1 rounded text-xs font-medium"
+                        style={{
+                          backgroundColor: `${exp.color}10`,
+                          color: exp.color,
+                          border: `1px solid ${exp.color}30`
+                        }}
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Top Achievements Preview */}
+                <div className="mb-3">
+                  <div className="text-xs font-semibold text-light-gray/70 mb-2">Key Impact:</div>
+                  <ul className="space-y-1">
+                    {exp.topAchievements.slice(0, 2).map((achievement, i) => (
+                      <li key={i} className="text-light-gray/70 text-xs flex items-start gap-1.5">
+                        <span className="text-lime mt-0.5">▸</span>
+                        <span className="line-clamp-1">{achievement}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Highlights Preview */}
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  {exp.highlights.slice(0, 2).map((highlight) => (
+                    <div
+                      key={highlight.label}
+                      className="px-3 py-2 rounded-lg text-center"
+                      style={{ backgroundColor: `${exp.color}15`, border: `1px solid ${exp.color}30` }}
+                    >
+                      <div className="text-xs text-light-gray/70 truncate">{highlight.label}</div>
+                      <div className="text-lg font-bold" style={{ color: exp.color }}>{highlight.value}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* View Details */}
+                <div className="text-sm text-lime font-medium text-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  Click for full details →
+                </div>
               </motion.div>
             </Tilt3D>
           ))}
@@ -357,7 +358,7 @@ const ExperienceModal = ({ experience, onClose }: { experience: Experience | nul
     e.stopPropagation();
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {experience && (
         <motion.div
@@ -388,7 +389,7 @@ const ExperienceModal = ({ experience, onClose }: { experience: Experience | nul
               <h1 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">
                 {experience.role}
               </h1>
-              
+
               <div className="flex flex-wrap items-center gap-4 text-light-gray/70 mb-3">
                 <div className="flex items-center gap-2">
                   <Briefcase className="w-5 h-5" />
@@ -457,8 +458,8 @@ const ExperienceModal = ({ experience, onClose }: { experience: Experience | nul
                       <span
                         key={tech}
                         className="px-3 py-2 rounded-lg text-sm font-medium"
-                        style={{ 
-                          backgroundColor: `${experience.color}15`, 
+                        style={{
+                          backgroundColor: `${experience.color}15`,
                           color: experience.color,
                           border: `1px solid ${experience.color}30`
                         }}
@@ -513,7 +514,8 @@ const ExperienceModal = ({ experience, onClose }: { experience: Experience | nul
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 

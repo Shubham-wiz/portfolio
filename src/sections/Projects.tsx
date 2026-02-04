@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Code2, X, TrendingUp } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { projects, Project } from '../data/projects-data';
 import Tilt3D from '../components/Tilt3D';
 
@@ -33,41 +34,41 @@ const Projects = () => {
                 onClick={() => setSelectedProject(project)}
                 style={{ transformStyle: 'preserve-3d', minHeight: '550px' }}
               >
-              <div className="relative h-72 overflow-hidden">
-                <motion.img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ duration: 0.6 }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-card to-transparent" />
-              </div>
-
-              <div className="p-8 flex-1 flex flex-col">
-                <h3 className="font-display text-3xl font-bold mb-4 group-hover:text-gradient transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-light-gray text-lg mb-6 flex-1">{project.description}</p>
-                
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 rounded-full text-sm font-medium border"
-                      style={{ borderColor: `${project.color}40`, color: project.color }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                <div className="relative h-72 overflow-hidden">
+                  <motion.img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.6 }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-dark-card to-transparent" />
                 </div>
 
-                <div className="flex items-center gap-2 text-lime font-medium group-hover:gap-4 transition-all">
-                  <Code2 className="w-5 h-5" />
-                  <span>View Technical Details</span>
-                  <span className="transform group-hover:translate-x-2 transition-transform">→</span>
+                <div className="p-8 flex-1 flex flex-col">
+                  <h3 className="font-display text-3xl font-bold mb-4 group-hover:text-gradient transition-colors">
+                    {project.title}
+                  </h3>
+                  <p className="text-light-gray text-lg mb-6 flex-1">{project.description}</p>
+
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-3 py-1 rounded-full text-sm font-medium border"
+                        style={{ borderColor: `${project.color}40`, color: project.color }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-2 text-lime font-medium group-hover:gap-4 transition-all">
+                    <Code2 className="w-5 h-5" />
+                    <span>View Technical Details</span>
+                    <span className="transform group-hover:translate-x-2 transition-transform">→</span>
+                  </div>
                 </div>
-              </div>
               </motion.div>
             </Tilt3D>
           ))}
@@ -100,7 +101,7 @@ const ProjectModal = ({ project, onClose }: { project: Project | null; onClose: 
     e.stopPropagation();
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {project && (
         <motion.div
@@ -127,7 +128,7 @@ const ProjectModal = ({ project, onClose }: { project: Project | null; onClose: 
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-dark-card to-transparent" />
-              
+
               <button
                 onClick={onClose}
                 className="absolute top-4 right-4 p-2 bg-dark-bg/80 backdrop-blur-sm rounded-full text-white hover:bg-lime/20 hover:text-lime transition-colors"
@@ -237,7 +238,8 @@ const ProjectModal = ({ project, onClose }: { project: Project | null; onClose: 
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 

@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Clock, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import ReactMarkdown from 'react-markdown';
 import { blogArticles, BlogArticle } from '../data/blog-articles';
 import Tilt3D from '../components/Tilt3D';
@@ -67,11 +68,10 @@ const Blog = () => {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                selectedCategory === category
-                  ? 'bg-gradient-to-r from-purple-500 to-lime text-dark-bg'
-                  : 'border border-light-gray/20 text-light-gray hover:border-lime/50 hover:text-lime'
-              }`}
+              className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${selectedCategory === category
+                ? 'bg-gradient-to-r from-purple-500 to-lime text-dark-bg'
+                : 'border border-light-gray/20 text-light-gray hover:border-lime/50 hover:text-lime'
+                }`}
             >
               {category}
             </button>
@@ -134,7 +134,7 @@ const BlogCard = ({ post, index, onClick }: { post: BlogArticle; index: number; 
           transition={{ duration: 0.6 }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-dark-card via-dark-card/50 to-transparent" />
-        
+
         {/* Badges on image */}
         <div className="absolute top-4 left-4 flex gap-2">
           {post.featured && (
@@ -216,7 +216,7 @@ const ArticleModal = ({ article, onClose }: { article: BlogArticle | null; onClo
     e.stopPropagation();
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {article && (
         <motion.div
@@ -243,7 +243,7 @@ const ArticleModal = ({ article, onClose }: { article: BlogArticle | null; onClo
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-dark-card to-transparent" />
-              
+
               <button
                 onClick={onClose}
                 className="absolute top-4 right-4 p-2 bg-dark-bg/80 backdrop-blur-sm rounded-full text-white hover:bg-lime/20 hover:text-lime transition-colors"
@@ -326,7 +326,8 @@ const ArticleModal = ({ article, onClose }: { article: BlogArticle | null; onClo
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 
