@@ -7,7 +7,6 @@ export class NGramLM {
   private tri = new Map<string, Map<string, number>>();
   private bi = new Map<string, Map<string, number>>();
   private uni = new Map<string, number>();
-  private vocab: string[] = [];
 
   constructor(corpus: string) {
     const tokens = this.tokenize(corpus);
@@ -27,7 +26,6 @@ export class NGramLM {
         m.set(w, (m.get(w) || 0) + 1);
       }
     }
-    this.vocab = Array.from(this.uni.keys());
   }
 
   tokenize(text: string): string[] {
