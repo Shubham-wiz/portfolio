@@ -1,34 +1,208 @@
-@import "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700;800&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&display=swap";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --ink: #050505;
+  --bone: #f4f1ea;
+  --acid: #c6ff3d;
+  --electric: #5b6cff;
+  --flame: #ff4d1f;
+  --violet: #a78bfa;
+}
 
 @layer base {
   * {
     @apply m-0 p-0 box-border;
   }
 
-  body {
-    @apply bg-dark-bg text-white font-sans antialiased;
-    overflow-x: hidden;
+  html {
+    scroll-behavior: auto;
   }
 
-  html {
-    scroll-behavior: smooth;
+  body {
+    @apply bg-ink text-bone antialiased;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
   }
+
+  @media (hover: none) {
+    body { cursor: auto; }
+  }
+
+  ::selection {
+    background: var(--acid);
+    color: var(--ink);
+  }
+
+  /* Custom scrollbar - thin and sleek */
+  ::-webkit-scrollbar { width: 0px; height: 0px; }
 }
 
 @layer utilities {
+  .font-display {
+    font-family: 'Anton', 'Bricolage Grotesque', sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .font-serif-i {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+
   .text-gradient {
-    @apply bg-gradient-to-r from-purple-500 to-lime bg-clip-text text-transparent;
+    background: linear-gradient(135deg, #c6ff3d 0%, #a78bfa 55%, #ff4d1f 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .glow-text {
-    text-shadow: 0 0 40px rgba(209, 226, 157, 0.5);
+    text-shadow: 0 0 60px rgba(198, 255, 61, 0.35);
   }
 
-  .perspective-1000 {
-    perspective: 1000px;
+  .perspective-1000 { perspective: 1000px; }
+
+  /* SVG noise grain overlay */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.08;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.9'/></svg>");
   }
+
+  .grid-lines {
+    background-image:
+      linear-gradient(rgba(244, 241, 234, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(244, 241, 234, 0.06) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  .dot-grid {
+    background-image: radial-gradient(rgba(244, 241, 234, 0.14) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .no-cursor, .no-cursor * { cursor: none !important; }
+
+  .btn-reset { all: unset; cursor: pointer; }
+
+  .marquee-track {
+    animation: marquee 38s linear infinite;
+    will-change: transform;
+  }
+
+  .hover-acid:hover { color: var(--acid); }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid rgba(244, 241, 234, 0.18);
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(244, 241, 234, 0.78);
+    backdrop-filter: blur(6px);
+  }
+
+  .chip-acid {
+    border-color: rgba(198, 255, 61, 0.4);
+    color: var(--acid);
+    background: rgba(198, 255, 61, 0.06);
+  }
+
+  .divider-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(244, 241, 234, 0.25), transparent);
+  }
+
+  .tilt-mask {
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+
+  .shadow-acid {
+    box-shadow: 0 0 60px rgba(198, 255, 61, 0.25);
+  }
+}
+
+/* hide default cursor on interactive elements so the custom cursor shows clean */
+a, button, input, textarea, [role="button"] {
+  cursor: none;
+}
+
+/* ---- Mermaid diagram styling (overrides for the site palette) ---- */
+.mermaid-host svg {
+  max-width: 100%;
+  height: auto;
+}
+.mermaid-host .node rect,
+.mermaid-host .node polygon,
+.mermaid-host .node circle,
+.mermaid-host .node ellipse,
+.mermaid-host .node path {
+  stroke: rgba(244, 241, 234, 0.35) !important;
+  stroke-width: 1.2px !important;
+  fill: #111111 !important;
+}
+.mermaid-host .node .label,
+.mermaid-host .node text,
+.mermaid-host .nodeLabel,
+.mermaid-host .cluster text {
+  color: #f4f1ea !important;
+  fill: #f4f1ea !important;
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  font-size: 13px !important;
+}
+.mermaid-host .edgePath .path,
+.mermaid-host .flowchart-link {
+  stroke: rgba(198, 255, 61, 0.6) !important;
+  stroke-width: 1.4px !important;
+  fill: none !important;
+}
+.mermaid-host .marker,
+.mermaid-host .arrowheadPath {
+  fill: rgba(198, 255, 61, 0.8) !important;
+  stroke: none !important;
+}
+.mermaid-host .edgeLabel {
+  background-color: #0a0a0a !important;
+  color: #c9c6bf !important;
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  font-size: 11px !important;
+  padding: 2px 6px !important;
+}
+.mermaid-host .edgeLabel rect {
+  fill: #0a0a0a !important;
+}
+.mermaid-host .cluster rect {
+  fill: rgba(244, 241, 234, 0.02) !important;
+  stroke: rgba(244, 241, 234, 0.12) !important;
+  stroke-dasharray: 3 3 !important;
+}
+/* actor boxes in sequence diagrams */
+.mermaid-host .actor {
+  fill: #111111 !important;
+  stroke: rgba(198, 255, 61, 0.5) !important;
+}
+.mermaid-host .actor-line {
+  stroke: rgba(244, 241, 234, 0.2) !important;
+}
+.mermaid-host .messageText,
+.mermaid-host .labelText {
+  fill: #f4f1ea !important;
+  stroke: none !important;
 }

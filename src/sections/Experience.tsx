@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Briefcase, MapPin, X, TrendingUp } from 'lucide-react';
+import { Briefcase, MapPin, X, TrendingUp, AlertTriangle, CheckCircle2, Users, Layers } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import Tilt3D from '../components/Tilt3D';
+import TextReveal from '../components/TextReveal';
 
 interface Experience {
   id: string;
@@ -226,116 +226,120 @@ const Experience = () => {
   const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
 
   return (
-    <section id="experience" className="relative py-32 bg-dark-card overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div className="w-full h-full" style={{ backgroundImage: `linear-gradient(rgba(167, 139, 250, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(167, 139, 250, 0.5) 1px, transparent 1px)`, backgroundSize: '60px 60px' }} />
-      </div>
+    <section id="experience" className="relative py-28 md:py-36 bg-ink overflow-hidden">
+      <div className="absolute inset-0 grid-lines opacity-30 pointer-events-none" />
+      <div className="absolute top-24 -right-24 w-[500px] h-[500px] rounded-full bg-acid/5 blur-[140px] pointer-events-none" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ zIndex: 10 }}>
-        <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-          <h2 className="font-display text-5xl md:text-7xl font-bold mb-6 text-gradient">Experience</h2>
-          <p className="text-light-gray text-lg md:text-xl">
-            Building impactful solutions across leading tech companies
-          </p>
-        </motion.div>
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-16">
+        <div className="flex items-center gap-4 mb-10 font-mono text-xs uppercase tracking-[0.3em] text-bone/50">
+          <span className="w-2 h-2 rotate-45 bg-acid" />
+          / 05 — Track record
+          <span className="flex-1 h-px bg-bone/10" />
+          <span className="text-bone/30">2019 — present</span>
+        </div>
 
-        {/* Horizontal grid of compact cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mb-14 flex flex-col lg:flex-row justify-between items-end gap-6">
+          <TextReveal
+            as="h2"
+            text="Where I've shipped."
+            className="font-display uppercase tracking-crushed leading-[0.88] text-bone text-[clamp(2.5rem,8vw,8rem)]"
+          />
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-bone/60 text-lg max-w-md"
+          >
+            Five years across AI startups, construction-tech and industrial ML. Click any card for the full case.
+          </motion.p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {experiences.map((exp, index) => (
-            <Tilt3D key={exp.id} tiltMaxAngle={10}>
-              <motion.div
-                initial={false}
-                animate={{ opacity: 1, y: 0 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="group bg-dark-bg border border-light-gray/10 rounded-xl p-6 hover:border-lime/30 transition-all duration-300 cursor-pointer h-full flex flex-col"
-                whileHover={{ scale: 1.02 }}
-                onClick={() => setSelectedExperience(exp)}
-                style={{ transformStyle: 'preserve-3d', minHeight: '420px' }}
-              >
-                {/* Company & Role */}
-                <div className="mb-3">
-                  <h3 className="font-display text-xl font-bold mb-2 group-hover:text-gradient transition-colors line-clamp-2">
-                    {exp.role}
-                  </h3>
-                  <div className="flex items-center gap-2 text-light-gray/70 text-sm mb-1">
-                    <Briefcase className="w-4 h-4" />
-                    <span className="font-medium">{exp.company}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-light-gray/60 text-xs mb-2">
-                    <MapPin className="w-3 h-3" />
-                    <span>{exp.location}</span>
-                  </div>
-                  {/* Tagline */}
-                  <p className="text-light-gray/80 text-sm italic line-clamp-2">
-                    {exp.tagline}
-                  </p>
-                </div>
+            <motion.button
+              key={exp.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ delay: index * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -6 }}
+              onClick={() => setSelectedExperience(exp)}
+              data-cursor="open case"
+              className="group relative bg-bone/[0.02] border border-bone/10 rounded-2xl p-6 hover:border-acid/40 transition-colors text-left h-full flex flex-col overflow-hidden"
+            >
+              <div
+                className="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl opacity-30 group-hover:opacity-50 transition-opacity"
+                style={{ backgroundColor: exp.color }}
+              />
 
-                {/* Period Badge */}
-                <div className="px-3 py-1.5 rounded-full border border-lime/30 text-lime font-mono text-xs text-center mb-3">
+              <div className="relative flex items-start justify-between gap-3 mb-5">
+                <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/40">
+                  / {String(index + 1).padStart(2, '0')}
+                </div>
+                <div
+                  className="px-2.5 py-1 rounded-full font-mono text-[10px] uppercase tracking-[0.25em]"
+                  style={{
+                    backgroundColor: `${exp.color}15`,
+                    color: exp.color,
+                    border: `1px solid ${exp.color}40`,
+                  }}
+                >
                   {exp.period}
                 </div>
+              </div>
 
-                {/* Key Technologies */}
-                <div className="mb-3">
-                  <div className="text-xs font-semibold text-light-gray/70 mb-2">Tech Stack:</div>
-                  <div className="flex flex-wrap gap-1">
-                    {exp.keyTech.slice(0, 4).map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-1 rounded text-xs font-medium"
-                        style={{
-                          backgroundColor: `${exp.color}10`,
-                          color: exp.color,
-                          border: `1px solid ${exp.color}30`
-                        }}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+              <h3 className="relative font-display uppercase text-bone text-2xl md:text-3xl leading-[0.95] tracking-crushed mb-2 group-hover:text-acid transition-colors">
+                {exp.role}
+              </h3>
 
-                {/* Top Achievements Preview */}
-                <div className="mb-3">
-                  <div className="text-xs font-semibold text-light-gray/70 mb-2">Key Impact:</div>
-                  <ul className="space-y-1">
-                    {exp.topAchievements.slice(0, 2).map((achievement, i) => (
-                      <li key={i} className="text-light-gray/70 text-xs flex items-start gap-1.5">
-                        <span className="text-lime mt-0.5">▸</span>
-                        <span className="line-clamp-1">{achievement}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div className="relative flex items-center gap-2 text-bone/70 text-sm mb-1">
+                <Briefcase className="w-3.5 h-3.5" />
+                <span className="font-medium">{exp.company}</span>
+              </div>
+              <div className="relative flex items-center gap-2 text-bone/45 font-mono text-[11px] uppercase tracking-widest mb-4">
+                <MapPin className="w-3 h-3" />
+                <span>{exp.location}</span>
+              </div>
 
-                {/* Highlights Preview */}
-                <div className="grid grid-cols-2 gap-2 mb-3">
-                  {exp.highlights.slice(0, 2).map((highlight) => (
+              <p className="relative text-bone/65 text-sm leading-relaxed mb-5 line-clamp-2 font-serif-i text-base">
+                {exp.tagline}
+              </p>
+
+              <div className="relative flex flex-wrap gap-1.5 mb-5">
+                {exp.keyTech.slice(0, 4).map((tech) => (
+                  <span key={tech} className="chip text-[10px]">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div className="relative grid grid-cols-2 gap-2 mb-5 mt-auto">
+                {exp.highlights.slice(0, 2).map((h) => (
+                  <div
+                    key={h.label}
+                    className="px-3 py-2.5 rounded-xl bg-bone/[0.03] border border-bone/10"
+                  >
                     <div
-                      key={highlight.label}
-                      className="px-3 py-2 rounded-lg text-center"
-                      style={{ backgroundColor: `${exp.color}15`, border: `1px solid ${exp.color}30` }}
+                      className="font-display text-2xl tracking-crushed leading-none"
+                      style={{ color: exp.color }}
                     >
-                      <div className="text-xs text-light-gray/70 truncate">{highlight.label}</div>
-                      <div className="text-lg font-bold" style={{ color: exp.color }}>{highlight.value}</div>
+                      {h.value}
                     </div>
-                  ))}
-                </div>
+                    <div className="font-mono text-[9px] uppercase tracking-widest text-bone/40 mt-1 truncate">
+                      {h.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-                {/* View Details */}
-                <div className="text-sm text-lime font-medium text-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  Click for full details →
-                </div>
-              </motion.div>
-            </Tilt3D>
+              <div className="relative flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.3em] text-bone/40 group-hover:text-acid transition-colors">
+                <span>Full case →</span>
+              </div>
+            </motion.button>
           ))}
         </div>
       </div>
 
-      {/* Experience Detail Modal */}
       <ExperienceModal
         experience={selectedExperience}
         onClose={() => setSelectedExperience(null)}
@@ -344,19 +348,25 @@ const Experience = () => {
   );
 };
 
-const ExperienceModal = ({ experience, onClose }: { experience: Experience | null; onClose: () => void }) => {
+const ExperienceModal = ({
+  experience,
+  onClose,
+}: {
+  experience: Experience | null;
+  onClose: () => void;
+}) => {
   useEffect(() => {
-    if (experience) {
-      document.body.style.overflow = 'hidden';
-    }
+    if (!experience) return;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
     return () => {
       document.body.style.overflow = 'unset';
+      window.removeEventListener('keydown', onKey);
     };
-  }, [experience]);
-
-  const handleModalScroll = (e: React.WheelEvent) => {
-    e.stopPropagation();
-  };
+  }, [experience, onClose]);
 
   return createPortal(
     <AnimatePresence>
@@ -365,151 +375,164 @@ const ExperienceModal = ({ experience, onClose }: { experience: Experience | nul
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto"
-          style={{ alignItems: 'center' }}
+          data-lenis-prevent
+          className="fixed inset-0 bg-ink/85 backdrop-blur-lg z-[10001] flex items-start md:items-center justify-center p-0 md:p-6"
           onClick={onClose}
         >
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="relative bg-dark-card border border-light-gray/20 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            initial={{ scale: 0.96, opacity: 0, y: 30 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.96, opacity: 0, y: 30 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="relative bg-ink border border-bone/15 rounded-none md:rounded-3xl w-full md:max-w-4xl md:max-h-[92vh] h-screen md:h-auto overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
-            onWheel={handleModalScroll}
           >
-            {/* Header */}
-            <div className="sticky top-0 z-10 bg-dark-card border-b border-light-gray/10 p-6">
-              <button
-                onClick={onClose}
-                className="absolute top-4 right-4 p-2 bg-dark-bg/80 backdrop-blur-sm rounded-full text-white hover:bg-lime/20 hover:text-lime transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
+            <button
+              onClick={onClose}
+              data-cursor="close"
+              className="absolute top-4 right-4 md:top-6 md:right-6 z-30 w-11 h-11 rounded-full bg-ink/80 backdrop-blur border border-bone/20 text-bone hover:bg-acid hover:text-ink hover:border-acid grid place-items-center transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
 
-              <h1 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">
-                {experience.role}
-              </h1>
+            <div className="overflow-y-auto flex-1">
+              {/* Header band with accent */}
+              <div className="relative px-6 md:px-12 pt-10 md:pt-14 pb-8 overflow-hidden">
+                <div
+                  className="absolute -top-20 -left-20 w-[420px] h-[420px] rounded-full blur-[140px] opacity-30 pointer-events-none"
+                  style={{ backgroundColor: experience.color }}
+                />
 
-              <div className="flex flex-wrap items-center gap-4 text-light-gray/70 mb-3">
-                <div className="flex items-center gap-2">
-                  <Briefcase className="w-5 h-5" />
-                  <span className="font-medium text-lg">{experience.company}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  <span>{experience.location}</span>
-                </div>
-              </div>
-
-              <div className="inline-block px-4 py-2 rounded-full border border-lime/30 text-lime font-mono text-sm">
-                {experience.period}
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-8">
-              {/* Metrics */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-                {experience.highlights.map((highlight) => (
-                  <div
-                    key={highlight.label}
-                    className="bg-dark-bg border border-light-gray/10 rounded-lg p-4 text-center"
+                <div className="relative flex flex-wrap items-center gap-3 mb-5 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">
+                  <span
+                    className="px-2.5 py-1 rounded-full"
+                    style={{
+                      backgroundColor: `${experience.color}15`,
+                      color: experience.color,
+                      border: `1px solid ${experience.color}40`,
+                    }}
                   >
-                    <div className="text-3xl font-bold mb-1" style={{ color: experience.color }}>
-                      {highlight.value}
-                    </div>
-                    <div className="text-sm text-light-gray/70">{highlight.label}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Detailed Overview */}
-              {experience.detailedDescription && (
-                <div className="mb-10">
-                  <h2 className="text-2xl font-display font-bold text-white mb-4">Overview</h2>
-                  <p className="text-light-gray text-lg leading-relaxed">
-                    {experience.detailedDescription}
-                  </p>
+                    {experience.period}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Briefcase className="w-3 h-3" />
+                    {experience.company}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="w-3 h-3" />
+                    {experience.location}
+                  </span>
                 </div>
-              )}
 
-              {/* Responsibilities */}
-              <div className="mb-10">
-                <h2 className="text-2xl font-display font-bold text-white mb-6 flex items-center gap-2">
-                  <TrendingUp style={{ color: experience.color }} />
-                  Key Responsibilities & Achievements
-                </h2>
-                <ul className="space-y-4">
-                  {experience.description.map((item, i) => (
-                    <li key={i} className="text-light-gray text-lg flex items-start gap-3">
-                      <span className="text-lime mt-1 text-xl">▹</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
+                <h1 className="relative font-display uppercase text-bone text-3xl md:text-6xl tracking-crushed leading-[0.9] mb-4">
+                  {experience.role}
+                </h1>
+                <p className="relative font-serif-i text-xl md:text-2xl text-bone/70 leading-snug max-w-2xl">
+                  {experience.tagline}
+                </p>
               </div>
 
-              {/* Complete Tech Stack */}
-              {experience.allTechnologies && (
-                <div className="mb-10">
-                  <h2 className="text-2xl font-display font-bold text-white mb-4">Complete Technology Stack</h2>
-                  <div className="flex flex-wrap gap-2">
-                    {experience.allTechnologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-2 rounded-lg text-sm font-medium"
-                        style={{
-                          backgroundColor: `${experience.color}15`,
-                          color: experience.color,
-                          border: `1px solid ${experience.color}30`
-                        }}
+              <div className="px-6 md:px-12 pb-12 md:pb-16 max-w-3xl mx-auto">
+                {/* Metrics */}
+                {experience.highlights.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-14">
+                    {experience.highlights.map((h) => (
+                      <div
+                        key={h.label}
+                        className="bg-bone/[0.03] border border-bone/10 rounded-2xl p-4 text-center"
                       >
-                        {tech}
-                      </span>
+                        <div
+                          className="font-display text-3xl md:text-4xl tracking-crushed leading-none"
+                          style={{ color: experience.color }}
+                        >
+                          {h.value}
+                        </div>
+                        <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/50 mt-2">
+                          {h.label}
+                        </div>
+                      </div>
                     ))}
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Challenges */}
-              {experience.challenges && experience.challenges.length > 0 && (
-                <div className="mb-10">
-                  <h2 className="text-2xl font-display font-bold text-white mb-6">Challenges & Solutions</h2>
-                  <ul className="space-y-4">
-                    {experience.challenges.map((challenge, i) => (
-                      <li key={i} className="text-light-gray text-lg flex items-start gap-3">
-                        <span className="text-orange-400 mt-1 text-xl">◆</span>
-                        <span>{challenge}</span>
+                {experience.detailedDescription && (
+                  <ExpSection title="Overview" icon={<TrendingUp className="w-5 h-5" style={{ color: experience.color }} />}>
+                    <p className="text-bone/75 text-lg leading-[1.8]">{experience.detailedDescription}</p>
+                  </ExpSection>
+                )}
+
+                <ExpSection title="Key responsibilities">
+                  <ul className="space-y-3">
+                    {experience.description.map((item, i) => (
+                      <li key={i} className="flex gap-3 bg-bone/[0.03] border border-bone/10 rounded-xl p-4">
+                        <span className="text-acid text-xl leading-none shrink-0">▹</span>
+                        <span className="text-bone/80 leading-relaxed">{item}</span>
                       </li>
                     ))}
                   </ul>
-                </div>
-              )}
+                </ExpSection>
 
-              {/* Outcomes */}
-              {experience.outcomes && experience.outcomes.length > 0 && (
-                <div className="mb-10">
-                  <h2 className="text-2xl font-display font-bold text-white mb-6">Results & Impact</h2>
-                  <ul className="space-y-4">
-                    {experience.outcomes.map((outcome, i) => (
-                      <li key={i} className="text-light-gray text-lg flex items-start gap-3">
-                        <span className="text-lime mt-1 text-xl">✓</span>
-                        <span>{outcome}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                {experience.allTechnologies && experience.allTechnologies.length > 0 && (
+                  <ExpSection
+                    title="Stack"
+                    icon={<Layers className="w-5 h-5" style={{ color: experience.color }} />}
+                  >
+                    <div className="flex flex-wrap gap-2">
+                      {experience.allTechnologies.map((tech) => (
+                        <span
+                          key={tech}
+                          className="chip"
+                          style={{
+                            backgroundColor: `${experience.color}12`,
+                            color: experience.color,
+                            borderColor: `${experience.color}40`,
+                          }}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </ExpSection>
+                )}
 
-              {/* Team Info */}
-              {experience.teamInfo && (
-                <div className="mb-8">
-                  <h2 className="text-2xl font-display font-bold text-white mb-4">Team & Collaboration</h2>
-                  <p className="text-light-gray text-lg leading-relaxed">
-                    {experience.teamInfo}
-                  </p>
-                </div>
-              )}
+                {experience.challenges && experience.challenges.length > 0 && (
+                  <ExpSection
+                    title="Challenges"
+                    icon={<AlertTriangle className="w-5 h-5 text-flame" />}
+                  >
+                    <ul className="space-y-3">
+                      {experience.challenges.map((c, i) => (
+                        <li key={i} className="flex gap-3 bg-bone/[0.03] border border-bone/10 rounded-xl p-4">
+                          <span className="text-flame text-lg leading-none shrink-0">◆</span>
+                          <span className="text-bone/80 leading-relaxed">{c}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </ExpSection>
+                )}
+
+                {experience.outcomes && experience.outcomes.length > 0 && (
+                  <ExpSection
+                    title="Results"
+                    icon={<CheckCircle2 className="w-5 h-5 text-acid" />}
+                  >
+                    <ul className="space-y-3">
+                      {experience.outcomes.map((o, i) => (
+                        <li key={i} className="flex gap-3 bg-bone/[0.03] border border-bone/10 rounded-xl p-4">
+                          <span className="text-acid text-lg leading-none shrink-0">✓</span>
+                          <span className="text-bone/80 leading-relaxed">{o}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </ExpSection>
+                )}
+
+                {experience.teamInfo && (
+                  <ExpSection title="Team" icon={<Users className="w-5 h-5 text-bone/60" />}>
+                    <p className="text-bone/75 text-lg leading-relaxed">{experience.teamInfo}</p>
+                  </ExpSection>
+                )}
+              </div>
             </div>
           </motion.div>
         </motion.div>
@@ -518,5 +541,23 @@ const ExperienceModal = ({ experience, onClose }: { experience: Experience | nul
     document.body
   );
 };
+
+const ExpSection = ({
+  title,
+  icon,
+  children,
+}: {
+  title: string;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+}) => (
+  <section className="mb-12 last:mb-0">
+    <h2 className="font-display uppercase text-bone text-2xl md:text-3xl tracking-crushed mb-5 flex items-center gap-3">
+      {icon}
+      {title}
+    </h2>
+    {children}
+  </section>
+);
 
 export default Experience;

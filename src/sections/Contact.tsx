@@ -38,15 +38,24 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="relative py-32 bg-dark-bg overflow-hidden">
-      <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-lime/10 rounded-full blur-[120px]" />
+    <section id="contact" className="relative py-28 md:py-36 bg-ink overflow-hidden">
+      <div className="absolute top-20 left-10 w-96 h-96 bg-violet/15 rounded-full blur-[140px]" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-acid/15 rounded-full blur-[140px]" />
+      <div className="absolute inset-0 grid-lines opacity-40 pointer-events-none" />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-          <h2 className="font-display text-5xl md:text-7xl font-bold mb-6 text-gradient">Let's Connect</h2>
-          <p className="text-light-gray text-lg md:text-xl max-w-2xl mx-auto">
-            Interested in collaboration? Drop me a message and let's build something amazing together.
+      <div className="relative z-10 max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
+        <div className="flex items-center gap-4 mb-10 font-mono text-xs uppercase tracking-[0.3em] text-bone/50">
+          <span className="w-2 h-2 rotate-45 bg-acid" />
+          / 07 — Contact
+          <span className="flex-1 h-px bg-bone/10" />
+          <span className="text-bone/30">The inbox is open</span>
+        </div>
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-14 flex flex-col lg:flex-row justify-between items-end gap-6">
+          <h2 className="font-display uppercase tracking-crushed leading-[0.88] text-bone text-[clamp(3rem,9vw,9rem)]">
+            Let's build<br />something loud.
+          </h2>
+          <p className="max-w-md text-bone/60 text-lg">
+            Consulting, contract, or coffee at Tempelhof — the DMs are always open.
           </p>
         </motion.div>
 
@@ -223,10 +232,16 @@ const Contact = () => {
           <p className="text-light-gray/50 text-sm mb-4">
             © 2025 Shubham Dwivedi. All rights reserved.
           </p>
-          <div className="flex justify-center gap-6 text-sm text-light-gray/50">
-            {["Home", "About", "Projects", "Blog"].map((link) => (
-              <a key={link} href={`#${link.toLowerCase()}`} className="hover:text-lime transition-colors">
-                {link}
+          <div className="flex justify-center gap-6 font-mono text-xs uppercase tracking-widest text-bone/40">
+            {[
+              { label: 'Home', id: 'home' },
+              { label: 'About', id: 'about' },
+              { label: 'Work', id: 'work' },
+              { label: 'Lab', id: 'lab' },
+              { label: 'Writings', id: 'writings' },
+            ].map((link) => (
+              <a key={link.id} href={`#${link.id}`} className="hover:text-acid transition-colors">
+                {link.label}
               </a>
             ))}
           </div>

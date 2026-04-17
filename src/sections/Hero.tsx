@@ -1,298 +1,219 @@
-import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import ParticleBackground from '../components/ParticleBackground';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import HeroCanvas from '../components/HeroCanvas';
+import MagneticButton from '../components/MagneticButton';
+import Marquee from '../components/Marquee';
 
-const Hero = ({ onNavigate }: { onNavigate: (section: string) => void }) => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+interface Props {
+  onNavigate: (id: string) => void;
+}
 
+const Hero = ({ onNavigate }: Props) => {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+
+  const [now, setNow] = useState<string>('');
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+    const update = () => {
+      const d = new Date();
+      setNow(
+        d.toLocaleTimeString('en-GB', {
+          timeZone: 'Europe/Berlin',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        })
+      );
     };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
   }, []);
 
-  // More dynamic letter animations with stagger and 3D effects
-  const nameVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  const letterVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 100,
-      rotateX: -90,
-      scale: 0.5,
-    },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      rotateX: 0,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        delay: i * 0.05,
-        ease: [0.16, 1, 0.3, 1],
-        type: "spring",
-        stiffness: 100,
-        damping: 12
-      }
-    })
-  };
-
-  const glowVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: [0, 1, 0.8, 1],
-      transition: {
-        duration: 2,
-        ease: "easeInOut",
-        repeat: Infinity,
-        repeatType: "reverse" as const
-      }
-    }
-  };
-
-  const name = "Shubham Dwivedi";
-  const title = "Data Engineer & AI Architect";
-
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-dark-bg">
-      {/* Particle Background */}
-      <ParticleBackground />
-      
-      {/* Dynamic gradient background that follows mouse */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute w-[600px] h-[600px] rounded-full"
-          style={{
-            background: 'radial-gradient(circle, rgba(167, 139, 250, 0.15) 0%, transparent 70%)',
-            filter: 'blur(80px)',
-          }}
-          animate={{
-            x: mousePosition.x - 300,
-            y: mousePosition.y - 300,
-          }}
-          transition={{ type: "spring", damping: 50, stiffness: 100 }}
-        />
-        <motion.div
-          className="absolute w-[500px] h-[500px] rounded-full"
-          style={{
-            background: 'radial-gradient(circle, rgba(209, 226, 157, 0.1) 0%, transparent 70%)',
-            filter: 'blur(60px)',
-          }}
-          animate={{
-            x: mousePosition.x - 250,
-            y: mousePosition.y - 250,
-          }}
-          transition={{ type: "spring", damping: 30, stiffness: 80, delay: 0.1 }}
-        />
-      </div>
+    <section
+      ref={ref as any}
+      id="home"
+      className="relative min-h-[110vh] bg-ink overflow-hidden"
+    >
+      {/* canvas layer */}
+      <motion.div
+        style={{ scale }}
+        className="absolute inset-0 z-0"
+      >
+        <HeroCanvas />
+      </motion.div>
 
-      {/* Grid pattern overlay */}
-      <div className="absolute inset-0 opacity-[0.03]">
-        <div
-          className="w-full h-full"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(167, 139, 250, 0.5) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(167, 139, 250, 0.5) 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px'
-          }}
-        />
-      </div>
+      {/* dotted grid overlay */}
+      <div className="absolute inset-0 dot-grid opacity-40 mix-blend-overlay z-[1]" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="mb-6"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="inline-block px-4 py-2 rounded-full border border-lime/20 bg-lime/5 mb-8"
-          >
-            <span className="text-lime text-sm font-mono">
-              ✨ Available for consulting & collaboration
-            </span>
-          </motion.div>
-        </motion.div>
+      {/* ambient colored blobs */}
+      <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-violet/10 blur-[160px] z-[1]" />
+      <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] rounded-full bg-acid/10 blur-[160px] z-[1]" />
 
-        {/* Dynamic animated name with 3D perspective */}
-        <div className="perspective-1000 mb-8">
-          <motion.h1
-            className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold mb-6"
-            variants={nameVariants}
-            initial="hidden"
-            animate="visible"
-            style={{ transformStyle: 'preserve-3d' }}
-          >
-            {name.split('').map((char, index) => (
-              <motion.span
-                key={index}
-                custom={index}
-                variants={letterVariants}
-                className="inline-block"
-                style={{
-                  transformOrigin: 'center bottom',
-                  transformStyle: 'preserve-3d',
-                }}
-                whileHover={{
-                  y: -10,
-                  scale: 1.2,
-                  rotateZ: Math.random() * 20 - 10,
-                  transition: { duration: 0.3 }
-                }}
-              >
-                <span
-                  className="relative inline-block text-gradient"
-                  style={{
-                    background: `linear-gradient(135deg, #a78bfa ${index * 3}%, #d1e29d ${100 - index * 2}%)`,
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
-                >
-                  {char === ' ' ? '\u00A0' : char}
-                  {/* Glow effect */}
-                  <motion.span
-                    variants={glowVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className="absolute inset-0 blur-xl"
-                    style={{
-                      background: `linear-gradient(135deg, #a78bfa ${index * 3}%, #d1e29d ${100 - index * 2}%)`,
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                      zIndex: -1
-                    }}
-                  >
-                    {char === ' ' ? '\u00A0' : char}
-                  </motion.span>
-                </span>
-              </motion.span>
-            ))}
-          </motion.h1>
+      {/* Content */}
+      <motion.div
+        style={{ y, opacity }}
+        className="relative z-10 min-h-screen flex flex-col justify-center pt-28 px-6 sm:px-10 lg:px-16"
+      >
+        {/* top meta row */}
+        <div className="flex flex-wrap items-center justify-between gap-4 font-mono text-[11px] uppercase tracking-[0.25em] text-bone/55 mb-16">
+          <div className="flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-acid animate-pulse" />
+            <span>Available · Q2 2026</span>
+          </div>
+          <div className="flex items-center gap-6">
+            <span>Berlin · 52.52°N 13.40°E</span>
+            <span className="text-acid">{now}</span>
+          </div>
         </div>
 
-        {/* Animated title */}
-        <motion.h2
-          className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-        >
-          {title.split('').map((char, index) => (
+        {/* big name */}
+        <div className="relative">
+          <motion.h1
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            className="font-display leading-[0.82] tracking-crushed uppercase text-bone select-none"
+            style={{ fontSize: 'clamp(4rem, 15vw, 18rem)' }}
+          >
             <motion.span
-              key={index}
-              initial={{ opacity: 0, y: 100, rotateX: -90 }}
-              animate={{ opacity: 1, y: 0, rotateX: 0 }}
-              transition={{
-                duration: 0.6,
-                delay: 1.2 + index * 0.04,
-                ease: [0.16, 1, 0.3, 1]
-              }}
-              className="inline-block text-gradient glow-text"
-              style={{ transformOrigin: 'center bottom' }}
+              initial={{ y: '110%', opacity: 0 }}
+              animate={{ y: '0%', opacity: 1 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="block overflow-hidden"
             >
-              {char === ' ' ? '\u00A0' : char}
+              <span className="block">Shubham</span>
             </motion.span>
-          ))}
-        </motion.h2>
+            <motion.span
+              initial={{ y: '110%', opacity: 0 }}
+              animate={{ y: '0%', opacity: 1 }}
+              transition={{ duration: 1, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+              className="block overflow-hidden"
+            >
+              <span className="block">
+                Dw<span className="font-serif-i text-acid lowercase">i</span>ved
+                <span className="font-serif-i lowercase text-violet">i</span>
+              </span>
+            </motion.span>
+          </motion.h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.8, duration: 0.8 }}
-          className="text-light-gray text-base sm:text-lg md:text-xl max-w-3xl mx-auto mb-12 leading-relaxed"
-        >
-          Building scalable data pipelines and intelligent AI systems that transform raw data into actionable insights. 
-          Specializing in MLOps, distributed computing, and agentic AI architectures.
-        </motion.p>
+          {/* floating badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, rotate: -6 }}
+            animate={{ opacity: 1, scale: 1, rotate: -6 }}
+            transition={{ delay: 1, duration: 0.7 }}
+            className="hidden md:flex absolute -top-6 right-2 md:right-8 items-center gap-2 px-4 py-2 bg-acid text-ink font-mono text-xs uppercase tracking-[0.2em] rounded-full shadow-acid"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-ink animate-pulse" />
+            Data · AI · Architectures
+          </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.2, duration: 0.8 }}
-          className="flex flex-wrap gap-4 justify-center"
-        >
-          <button
-            onClick={() => onNavigate('projects')}
-            className="group relative px-8 py-4 bg-gradient-to-r from-purple-500 to-lime text-dark-bg font-semibold rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50"
+        {/* Subheadline */}
+        <div className="mt-10 grid md:grid-cols-12 gap-6 items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="md:col-span-5 md:col-start-1"
           >
-            <span className="relative z-10">Explore My Work →</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-lime to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </button>
-          
-          <button
-            onClick={() => onNavigate('contact')}
-            className="px-8 py-4 border-2 border-lime/30 text-lime font-semibold rounded-full hover:bg-lime/10 hover:border-lime transition-all duration-300 hover:scale-105"
+            <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-bone/50 mb-3">
+              / Manifesto
+            </p>
+            <p className="text-bone/80 text-xl md:text-2xl leading-snug">
+              I build <span className="font-serif-i text-acid">living</span> data systems and
+              <span className="font-serif-i text-violet"> thinking</span> agents — at the seam where
+              raw pipelines become intelligent products.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
+            className="md:col-span-5 md:col-start-8 flex flex-col gap-4"
           >
-            Get in Touch
-          </button>
-        </motion.div>
+            <div className="flex items-center gap-4">
+              <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-bone/50">
+                / Currently
+              </span>
+              <span className="flex-1 h-px bg-bone/15" />
+            </div>
+            <p className="text-bone/80 text-base md:text-lg">
+              Shipping multi-agent market intelligence at{' '}
+              <span className="text-acid">Metamatics</span>. Previously ETL at terabyte scale for
+              <span className="text-violet"> PERI GmbH</span> and <span className="text-flame">Quantizant</span>.
+            </p>
+
+            <div className="flex flex-wrap gap-3 mt-4">
+              <MagneticButton
+                onClick={() => onNavigate('work')}
+                cursorLabel="see work"
+                className="group relative inline-flex items-center gap-3 px-6 py-3 bg-acid text-ink font-display uppercase text-lg rounded-full overflow-hidden"
+              >
+                See the work
+                <span aria-hidden className="inline-block transition-transform group-hover:translate-x-1">
+                  →
+                </span>
+              </MagneticButton>
+              <MagneticButton
+                onClick={() => onNavigate('lab')}
+                cursorLabel="play"
+                className="group inline-flex items-center gap-3 px-6 py-3 border border-bone/25 text-bone hover:border-acid hover:text-acid transition-colors font-display uppercase text-lg rounded-full"
+              >
+                Play in the lab
+                <span aria-hidden className="inline-block transition-transform group-hover:translate-x-1">
+                  ↘
+                </span>
+              </MagneticButton>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* marquee at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 py-6 border-t border-bone/10 bg-ink/60 backdrop-blur-sm">
+        <Marquee
+          speed={42}
+          items={[
+            'DATA ENGINEER',
+            'AI ARCHITECT',
+            'MLOps',
+            'MULTI-AGENT SYSTEMS',
+            'APACHE SPARK',
+            'LANGCHAIN',
+            'PYTHON · TYPESCRIPT',
+            'AVAILABLE FOR WORK',
+          ]}
+          separator={<span>✦</span>}
+          className="font-display uppercase text-bone/85 text-2xl md:text-3xl tracking-tight"
+        />
       </div>
 
-      {/* Scroll indicator */}
+      {/* scroll cue */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.8 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10"
+        transition={{ delay: 1.6 }}
+        className="hidden md:block absolute bottom-24 right-10 z-10 font-mono text-[11px] uppercase tracking-[0.35em] text-bone/45"
       >
         <motion.div
-          animate={{ y: [0, 12, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-2 text-light-gray/50 cursor-pointer hover:text-lime transition-colors"
-          onClick={() => onNavigate('about')}
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity }}
+          className="flex items-center gap-3"
         >
-          <span className="text-xs font-mono">SCROLL</span>
-          <ChevronDown className="w-5 h-5" />
+          <span className="block w-12 h-px bg-bone/40" />
+          Scroll
         </motion.div>
       </motion.div>
-
-      {/* Location badge */}
-      <div className="absolute bottom-8 left-8 z-10">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 2.5 }}
-          className="font-mono text-xs text-light-gray/60 text-left"
-        >
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-2 h-2 bg-lime rounded-full animate-pulse" />
-            <span>GERMANY</span>
-          </div>
-          <div>51.1657° N, 10.4515° E</div>
-        </motion.div>
-      </div>
-
-      {/* System info badge */}
-      <div className="absolute top-8 right-8 z-10">
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 2.7 }}
-          className="font-mono text-xs text-lime/60 text-right"
-        >
-          <div>SYSTEM ONLINE</div>
-          <div className="text-light-gray/40">v2.0.0</div>
-        </motion.div>
-      </div>
     </section>
   );
 };
